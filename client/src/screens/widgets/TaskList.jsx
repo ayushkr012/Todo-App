@@ -6,15 +6,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import { setTasks } from "../../state";
 
-const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
+const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem, userId }) => {
   const dispatch = useDispatch();
-  const { tasks = [], user, token } = useSelector((state) => state.auth);
+  const { tasks = [], user, admin, token } = useSelector((state) => state.auth);
   const [filteredTasks, setFilteredTasks] = useState([]);
 
+  const tempId = userId || (user && user._id);
+
   // Fetch all tasks for the particular user
-  const getTasks = async () => {
+  const getTasks = async (tempId) => {
     const response = await fetch(
-      `${process.env.REACT_APP_Backend_URL}/task/${user._id}`,
+      `${process.env.REACT_APP_Backend_URL}/task/${tempId}`,
       {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -23,12 +25,16 @@ const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
     const data = await response.json();
     if (data.success) {
       dispatch(setTasks({ tasks: data.tasks }));
+    } else {
+      toast.error("Failed to fetch tasks", { autoClose: 500 });
     }
   };
 
   useEffect(() => {
-    getTasks();
-  }, []);
+    if (tempId) {
+      getTasks(tempId);
+    }
+  }, [tempId]);
 
   useEffect(() => {
     // Filter tasks based on activeMenuItem
@@ -46,7 +52,9 @@ const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
   const handleDelete = async (taskId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_Backend_URL}/task/${taskId}/${user._id}`,
+        `${process.env.REACT_APP_Backend_URL}/task/${taskId}/${
+          user ? user._id : userId
+        }`,
         {
           method: "DELETE",
           headers: {
@@ -94,9 +102,11 @@ const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
               <Typography variant="body2">Status: {task.status}</Typography>
             </Box>
             <Box>
-              <IconButton onClick={() => handleEdit(task)}>
-                <EditIcon />
-              </IconButton>
+              {!admin && (
+                <IconButton onClick={() => handleEdit(task)}>
+                  <EditIcon />
+                </IconButton>
+              )}
               <IconButton onClick={() => handleDelete(task._id)}>
                 <DeleteIcon />
               </IconButton>
@@ -104,7 +114,18 @@ const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
           </Paper>
         ))
       ) : (
-        <Typography variant="body2">No tasks available</Typography>
+        <Typography
+          variant="body2"
+          textAlign="center"
+          sx={{
+            color: "text.secondary",
+            fontSize: "1rem",
+            margin: "2rem 0",
+            fontWeight: "bold",
+          }}
+        >
+          No tasks available
+        </Typography>
       )}
     </Box>
   );

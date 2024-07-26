@@ -83,7 +83,7 @@ const LoginPage = () => {
               navigate("/");
             }}
           >
-            Todo Application
+            Todo App
           </Typography>
 
           <FlexBetween>

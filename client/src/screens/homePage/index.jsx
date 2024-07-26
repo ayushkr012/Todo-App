@@ -5,6 +5,7 @@ import TaskForm from "../widgets/TaskForm";
 import TaskList from "../widgets/TaskList";
 import { ToastContainer } from "react-toastify";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import UserListWidget from "../widgets/UserListWidget";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -12,6 +13,7 @@ const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { palette } = useTheme();
   const [editMode, setEditMode] = useState(false);
+  const [userId, setUserId] = useState(null);
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [activeMenuItem, setActiveMenuItem] = useState("All");
 
@@ -19,15 +21,14 @@ const HomePage = () => {
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.auth.user);
   const mode = useSelector((state) => state.auth.mode);
-
-  console.log("State:", { user });
+  const admin = useSelector((state) => state.auth.admin);
 
   // Ensure user exists before rendering
-  if (!user) {
+  if (!user && !admin) {
     return <Typography variant="h6">Loading...</Typography>;
   }
 
-  // middle up section part of notification
+  // middle up section part filter menu styling
   const BoxStyle = {
     padding: "0.8rem",
     borderRadius: "1rem",
@@ -85,21 +86,27 @@ const HomePage = () => {
           },
         }}
       >
-        {/* Left part of the home screen */}
+        {/* -------------------> Left part of the home screen ------------------------< */}
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <WidgetWrapper>
-            <Typography variant="h5" gutterBottom>
-              Welcome {user.firstName} {user.lastName}
-            </Typography>
-            <TaskForm
-              task={taskToEdit}
-              setEditMode={setEditMode}
-              setTaskToEdit={setTaskToEdit}
-            />
+            {admin ? null : (
+              <Typography variant="h5" gutterBottom>
+                Welcome {user.firstName} {user.lastName}
+              </Typography>
+            )}
+            {admin ? ( // pass the data to the UserListWidget.jsx
+              <UserListWidget setUserId={setUserId} />
+            ) : (
+              <TaskForm // pass the data to the TaskForm.jsx
+                task={taskToEdit}
+                setEditMode={setEditMode}
+                setTaskToEdit={setTaskToEdit}
+              />
+            )}
           </WidgetWrapper>
         </Box>
 
-        {/* Middle part of the home screen */}
+        {/*------------------------------> Middle part of the home screen ------------------------<*/}
         <Box
           flexBasis={isNonMobileScreens ? "50%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
@@ -167,11 +174,12 @@ const HomePage = () => {
               setEditMode={setEditMode}
               setTaskToEdit={setTaskToEdit}
               activeMenuItem={activeMenuItem}
+              userId={userId} // when admin login then we pass the userId to get the task of particular user Each Time
             />
           </WidgetWrapper>
         </Box>
 
-        {/* Right part of the home screen */}
+        {/* --------------------------> Right part of the home screen  ---------------------------< */}
         <Box flexBasis={isNonMobileScreens ? "15%" : undefined}></Box>
       </Box>
       <ToastContainer />

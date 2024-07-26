@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   admin: null,
   token: null,
+  users: [], // all users when admin login to get the list of users
   tasks: [],
 };
 
@@ -27,8 +28,8 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = null;
     },
-    setUser: (state, action) => {
-      state.user = action.payload.user;
+    setUsers: (state, action) => {
+      state.users = action.payload.users;
     },
     setLogout: (state) => {
       state.user = null;
@@ -55,7 +56,7 @@ export const {
   setLogout,
   setTasks,
   setTask,
-  setUser,
+  setUsers,
   setAdmin,
 } = authSlice.actions;
 
