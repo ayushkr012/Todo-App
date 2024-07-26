@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const TaskForm = ({ task, setEditMode, setTaskToEdit }) => {
   const [title, setTitle] = useState(task ? task.title : "");
   const [description, setDescription] = useState(task ? task.description : "");
-  const [status, setStatus] = useState(task ? task.status : "pending");
+  const [status, setStatus] = useState(task ? task.status : "Pending");
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -21,7 +21,7 @@ const TaskForm = ({ task, setEditMode, setTaskToEdit }) => {
       // Clear form if no task is provided
       setTitle("");
       setDescription("");
-      setStatus("pending");
+      setStatus("Pending");
     }
   }, [task]);
 
@@ -64,7 +64,7 @@ const TaskForm = ({ task, setEditMode, setTaskToEdit }) => {
         dispatch(setTasks({ tasks: data.tasks }));
         setTitle("");
         setDescription("");
-        setStatus("pending");
+        setStatus("Pending");
         toast.success(
           task ? "Task updated successfully" : "Task created successfully",
           { autoClose: 500 }
@@ -105,9 +105,9 @@ const TaskForm = ({ task, setEditMode, setTaskToEdit }) => {
         value={status}
         onChange={(e) => setStatus(e.target.value)}
       >
-        <MenuItem value="pending">Pending</MenuItem>
-        <MenuItem value="in-progress">In Progress</MenuItem>
-        <MenuItem value="completed">Completed</MenuItem>
+        <MenuItem value="Pending">Pending</MenuItem>
+        <MenuItem value="in-Progress">In Progress</MenuItem>
+        <MenuItem value="Completed">Completed</MenuItem>
       </TextField>
       <Button type="submit" variant="contained" color="primary">
         {task ? "Update Task" : "Create Task"}

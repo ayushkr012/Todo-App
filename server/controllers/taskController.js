@@ -59,7 +59,7 @@ export const updateTask = async (req, res) => {
     if (description) {
       task.description = description;
     }
-    if (status && ["pending", "in-progress", "completed"].includes(status)) {
+    if (status && ["Pending", "in-Progress", "Completed"].includes(status)) {
       task.status = status;
     }
 

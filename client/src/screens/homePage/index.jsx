@@ -6,15 +6,19 @@ import TaskList from "../widgets/TaskList";
 import { ToastContainer } from "react-toastify";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { palette } = useTheme();
   const [editMode, setEditMode] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const [activeMenuItem, setActiveMenuItem] = useState("All");
 
   // Access the auth state
+  const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.auth.user);
+  const mode = useSelector((state) => state.auth.mode);
 
   console.log("State:", { user });
 
@@ -22,6 +26,39 @@ const HomePage = () => {
   if (!user) {
     return <Typography variant="h6">Loading...</Typography>;
   }
+
+  // middle up section part of notification
+  const BoxStyle = {
+    padding: "0.8rem",
+    borderRadius: "1rem",
+    border: "1px solid",
+    transition: "background-color 0.3s ease",
+  };
+
+  const BoxHoverStyle = {
+    ...BoxStyle,
+    "&:hover": {
+      backgroundColor:
+        mode == "dark" ? palette.primary.dark : palette.primary.light,
+      cursor: "pointer",
+      color: "black",
+    },
+  };
+
+  const BoxActiveStyle = {
+    ...BoxStyle,
+    backgroundColor: "darkgreen",
+    color: "white",
+  };
+  const MenuItem = ({ text, isActive, onClick }) => {
+    const boxStyle = isActive ? BoxActiveStyle : BoxHoverStyle;
+
+    return (
+      <Box sx={boxStyle} onClick={onClick} ml="1rem">
+        <Typography fontWeight="500">{text}</Typography>
+      </Box>
+    );
+  };
 
   return (
     <Box>
@@ -54,22 +91,88 @@ const HomePage = () => {
             <Typography variant="h5" gutterBottom>
               Welcome {user.firstName} {user.lastName}
             </Typography>
-            <TaskForm task={taskToEdit} setEditMode={setEditMode} setTaskToEdit={setTaskToEdit} />
+            <TaskForm
+              task={taskToEdit}
+              setEditMode={setEditMode}
+              setTaskToEdit={setTaskToEdit}
+            />
           </WidgetWrapper>
         </Box>
 
         {/* Middle part of the home screen */}
         <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          flexBasis={isNonMobileScreens ? "50%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
-          <WidgetWrapper>
-            <TaskList setEditMode={setEditMode} setTaskToEdit={setTaskToEdit} />
+          {isNonMobileScreens ? (
+            // when the screen is not mobile
+            <WidgetWrapper>
+              <FlexBetween>
+                <FlexBetween>
+                  <MenuItem
+                    text="All"
+                    isActive={activeMenuItem === "All"}
+                    onClick={() => setActiveMenuItem("All")}
+                  />
+                  <MenuItem
+                    text="Pending"
+                    isActive={activeMenuItem === "Pending"}
+                    onClick={() => setActiveMenuItem("Pending")}
+                  />
+                  <MenuItem
+                    text="in-Progress"
+                    isActive={activeMenuItem === "in-Progress"}
+                    onClick={() => setActiveMenuItem("in-Progress")}
+                  />
+                  <MenuItem
+                    text="Completed"
+                    isActive={activeMenuItem === "Completed"}
+                    onClick={() => setActiveMenuItem("Completed")}
+                  />
+                </FlexBetween>
+              </FlexBetween>
+            </WidgetWrapper>
+          ) : (
+            // when the screen is mobile
+            <WidgetWrapper>
+              <FlexBetween sx={{ flexWrap: "wrap" }}>
+                {/* <FlexBetween> */}
+                <MenuItem
+                  text="All"
+                  isActive={activeMenuItem === "All"}
+                  onClick={() => setActiveMenuItem("All")}
+                />
+                <MenuItem
+                  text="Pending"
+                  isActive={activeMenuItem === "Pending"}
+                  onClick={() => setActiveMenuItem("Pending")}
+                />
+                <MenuItem
+                  text="in-Progress"
+                  isActive={activeMenuItem === "in-Progress"}
+                  onClick={() => setActiveMenuItem("in-Progress")}
+                />
+                <MenuItem
+                  text="Completed"
+                  isActive={activeMenuItem === "Completed"}
+                  onClick={() => setActiveMenuItem("Completed")}
+                />
+                {/* </FlexBetween> */}
+              </FlexBetween>
+            </WidgetWrapper>
+          )}
+
+          <WidgetWrapper sx={{ mt: "2%" }}>
+            <TaskList
+              setEditMode={setEditMode}
+              setTaskToEdit={setTaskToEdit}
+              activeMenuItem={activeMenuItem}
+            />
           </WidgetWrapper>
         </Box>
 
         {/* Right part of the home screen */}
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}></Box>
+        <Box flexBasis={isNonMobileScreens ? "15%" : undefined}></Box>
       </Box>
       <ToastContainer />
     </Box>

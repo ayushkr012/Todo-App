@@ -149,7 +149,7 @@ const LoginPage = () => {
               borderRadius="1.5rem"
               backgroundColor={theme.palette.background.alt}
             >
-              <GoogleOAuthProvider clientId="891424812020-99m03bd6qnjsh97ha51hoej4sp2a9suh.apps.googleusercontent.com">
+              <GoogleOAuthProvider clientId="97747057830-6oqoosdc81g9ag6lu4hvsh9pcd08ajru.apps.googleusercontent.com">
                 {loading ? (
                   <Box
                     position="fixed"

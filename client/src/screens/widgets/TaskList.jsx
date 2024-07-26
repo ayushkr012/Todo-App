@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Paper, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { toast } from "react-toastify";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { toast } from "react-toastify";
 import { setTasks } from "../../state";
 
-const TaskList = ({ setTaskToEdit, setEditMode }) => {
+const TaskList = ({ setTaskToEdit, setEditMode, activeMenuItem }) => {
   const dispatch = useDispatch();
   const { tasks = [], user, token } = useSelector((state) => state.auth);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
-  // fetch all tasks for the particular user
+  // Fetch all tasks for the particular user
   const getTasks = async () => {
     const response = await fetch(
       `${process.env.REACT_APP_Backend_URL}/task/${user._id}`,
@@ -20,12 +21,27 @@ const TaskList = ({ setTaskToEdit, setEditMode }) => {
       }
     );
     const data = await response.json();
-    dispatch(setTasks({ tasks: data.tasks }));
+    if (data.success) {
+      dispatch(setTasks({ tasks: data.tasks }));
+    }
   };
 
   useEffect(() => {
     getTasks();
   }, []);
+
+  useEffect(() => {
+    // Filter tasks based on activeMenuItem
+    let filtered = tasks;
+    if (activeMenuItem === "Pending") {
+      filtered = tasks.filter((task) => task.status === "Pending");
+    } else if (activeMenuItem === "in-Progress") {
+      filtered = tasks.filter((task) => task.status === "in-Progress");
+    } else if (activeMenuItem === "Completed") {
+      filtered = tasks.filter((task) => task.status === "Completed");
+    }
+    setFilteredTasks(filtered);
+  }, [activeMenuItem, tasks]);
 
   const handleDelete = async (taskId) => {
     try {
@@ -59,30 +75,37 @@ const TaskList = ({ setTaskToEdit, setEditMode }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-      {tasks.map((task) => (
-        <Paper
-          key={task._id}
-          sx={{
-            padding: "1rem",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
-            <Typography variant="h6">{task.title}</Typography>
-            <Typography variant="body2">{task.description}</Typography>
-            <Typography variant="body2">Status: {task.status}</Typography>
-          </Box>
-          <Box>
-            <IconButton onClick={() => handleEdit(task)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => handleDelete(task._id)}>
-              <DeleteIcon />
-            </IconButton>
-          </Box>
-        </Paper>
-      ))}
+      {filteredTasks.length > 0 ? (
+        filteredTasks.map((task) => (
+          <Paper
+            key={task._id}
+            sx={{
+              padding: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Box>
+              <Typography variant="h6">{task.title}</Typography>
+              <Typography variant="body2">{task.description}</Typography>
+              <Typography variant="body2">Status: {task.status}</Typography>
+            </Box>
+            <Box>
+              <IconButton onClick={() => handleEdit(task)}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={() => handleDelete(task._id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Paper>
+        ))
+      ) : (
+        <Typography variant="body2">No tasks available</Typography>
+      )}
     </Box>
   );
 };
