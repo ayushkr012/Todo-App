@@ -401,6 +401,9 @@ export const googleLogin = async (req, res) => {
     if (email_verified) {
       let user = await User.findOne({ email });
 
+      const [firstName, ...lastNameArray] = name.split(" ");
+      const lastName = lastNameArray.join(" ");
+
       if (user) {
         // Create and assign a token
         const payload = {
@@ -419,7 +422,8 @@ export const googleLogin = async (req, res) => {
           .json({ success: true, message: "Login Successful!", user, token });
       } else {
         const newUser = new User({
-          name,
+          firstName,
+          lastName,
           email,
           picturePath: picture,
         });

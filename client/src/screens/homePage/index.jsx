@@ -1,13 +1,28 @@
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import React, { useState } from "react";
+import { Box, useMediaQuery, useTheme, Typography } from "@mui/material";
 import Navbar from "../navbar";
-// import CreatePost from "../widgets/CreatePost";
+import TaskForm from "../widgets/TaskForm";
+import TaskList from "../widgets/TaskList";
 import { ToastContainer } from "react-toastify";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { _id } = useSelector((state) => state.user);
   const { palette } = useTheme();
+  const [editMode, setEditMode] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
+
+  // Access the auth state
+  const user = useSelector((state) => state.auth.user);
+
+  console.log("State:", { user });
+
+  // Ensure user exists before rendering
+  if (!user) {
+    return <Typography variant="h6">Loading...</Typography>;
+  }
+
   return (
     <Box>
       <Navbar />
@@ -20,22 +35,40 @@ const HomePage = () => {
         sx={{
           maxHeight: "100vh",
           overflowY: "auto",
-          scrollbarWidth: "0px",
-          scrollbarColor: `${palette.primary.main} ${palette.background.default}`, // Set scrollbar color
+          scrollbarWidth: "thin",
+          "&::-webkit-scrollbar": {
+            width: "0.4em",
+          },
+          "&::-webkit-scrollbar-track": {
+            boxShadow: `inset 0 0 6px ${palette.background.default}`,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: palette.primary.main,
+            borderRadius: "4px",
+          },
         }}
       >
-        {/*  left part of the home screen */}
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>Hii Ayush</Box>
+        {/* Left part of the home screen */}
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+          <WidgetWrapper>
+            <Typography variant="h5" gutterBottom>
+              Welcome {user.firstName} {user.lastName}
+            </Typography>
+            <TaskForm task={taskToEdit} setEditMode={setEditMode} setTaskToEdit={setTaskToEdit} />
+          </WidgetWrapper>
+        </Box>
 
-        {/*  middle part of the home screen */}
+        {/* Middle part of the home screen */}
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
-          {/* <CreatePost userId={_id} picturePath={picturePath} /> */}
+          <WidgetWrapper>
+            <TaskList setEditMode={setEditMode} setTaskToEdit={setTaskToEdit} />
+          </WidgetWrapper>
         </Box>
 
-        {/*  right part of the home screen */}
+        {/* Right part of the home screen */}
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}></Box>
       </Box>
       <ToastContainer />

@@ -23,7 +23,7 @@ export default function Navbar() {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.user);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
@@ -31,10 +31,9 @@ export default function Navbar() {
   const neutralLight = theme.palette.neutral.light;
   const dark = theme.palette.neutral.dark;
   const background = theme.palette.background.default;
-  const mode = useSelector((state) => state.mode);
   const alt = theme.palette.background.alt;
 
-  const fullName = `${user.name}`;
+  const fullName = `${user.firstName} ${user.lastName}`;
   // const fullName = "Ayush Kumar";
 
   return (

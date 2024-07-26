@@ -28,7 +28,7 @@ export const getAllUserTask = async (req, res) => {
 /* Retrieve all tasks for particular User */
 export const getParticularUsertask = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
     const tasks = await Task.find({ userId });
     res.status(200).json({ success: true, tasks });
   } catch (err) {
