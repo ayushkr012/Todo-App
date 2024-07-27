@@ -107,9 +107,15 @@ REACT_APP_Backend_URL=http://localhost:3001
 
 ### Authentication :
 
+### Password Based 
+
 ![alt text](<Screenshot 2024-07-27 131109.png>)
 
+### OTP Based 
+
 ![alt text](<Screenshot 2024-07-27 131122.png>)
+
+### Google Based 
 
 ![alt text](<Screenshot 2024-07-27 131147.png>)
 
