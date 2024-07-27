@@ -6,22 +6,23 @@ import {
   updateTask,
   deleteTask,
 } from "../controllers/taskController.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const taskRoutes = express.Router();
 
 /*  Create Task */
-taskRoutes.post("/createTask", createTask);
+taskRoutes.post("/createTask", verifyToken, createTask);
 
 /* Retrieve all tasks for all users */
-taskRoutes.get("/", getAllUserTask);
+taskRoutes.get("/", verifyToken, getAllUserTask);
 
 /* Retrieve all tasks for particular User */
-taskRoutes.get("/:userId", getParticularUsertask);
+taskRoutes.get("/:userId", verifyToken, getParticularUsertask);
 
 /* Update Task */
-taskRoutes.put("/:id/:userId", updateTask);
+taskRoutes.put("/:id/:userId", verifyToken, updateTask);
 
 /* Delete Task */
-taskRoutes.delete("/:id/:userId", deleteTask);
+taskRoutes.delete("/:id/:userId", verifyToken, deleteTask);
 
 export default taskRoutes;

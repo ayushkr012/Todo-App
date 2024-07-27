@@ -98,7 +98,10 @@ const TaskForm = ({ task, setEditMode, setTaskToEdit }) => {
         label="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        multiline
+        rows={4} // You can adjust the number of rows as needed
       />
+
       <TextField
         select
         label="Status"

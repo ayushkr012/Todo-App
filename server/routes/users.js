@@ -8,7 +8,7 @@ const userRoutes = express.Router();
 userRoutes.get("/:id", verifyToken, getUser);
 
 /* GET All Users */
-userRoutes.get("/", getAllUsers);
+userRoutes.get("/", verifyToken, getAllUsers);
 
 /* DELETE USER */
 
