@@ -107,7 +107,7 @@ export default function Navbar() {
                 },
               }}
             >
-              Managed Admin
+              manage Admin
             </Link>
           )}
 
@@ -213,7 +213,7 @@ export default function Navbar() {
                   },
                 }}
               >
-                Managed Admin
+                manage Admin
               </Link>
             )}
 
