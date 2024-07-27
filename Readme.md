@@ -98,3 +98,50 @@ REACT_APP_Backend_URL=http://localhost:3001
    ```bash
    npm start
    ```
+
+
+
+## ScreenShot of the Website
+
+
+
+### Authentication :
+
+![alt text](<Screenshot 2024-07-27 131109.png>)
+
+![alt text](<Screenshot 2024-07-27 131122.png>)
+
+![alt text](<Screenshot 2024-07-27 131147.png>)
+
+![alt text](<Screenshot 2024-07-27 131200.png>)
+
+![alt text](<Screenshot 2024-07-27 131223.png>)
+
+### Admin Part and Filter The Tasks Based On the Status || Perform Crud Operation On the Task || User Management 
+
+![alt text](<Screenshot 2024-07-27 131401.png>)
+
+![alt text](<Screenshot 2024-07-27 131409.png>)
+
+
+![alt text](<Screenshot 2024-07-27 131243.png>)
+
+![alt text](<Screenshot 2024-07-27 131258.png>)
+
+
+![alt text](<Screenshot 2024-07-27 131322.png>)
+
+![alt text](<Screenshot 2024-07-27 131335.png>)
+
+![alt text](<Screenshot 2024-07-27 131348.png>)
+
+
+### User Part || Filter The Tasks Based On the Status || Perform Crud Operation On the Task 
+
+![alt text](<Screenshot 2024-07-27 131438.png>)
+
+![alt text](<Screenshot 2024-07-27 131447.png>)
+
+![alt text](<Screenshot 2024-07-27 131510.png>)
+
+![alt text](<Screenshot 2024-07-27 131529.png>)
