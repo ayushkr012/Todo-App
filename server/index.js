@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import adminRoutes from "./routes/admin.js";
 import connectDB from "./config/db.js";
 import { generateSignature } from "./controllers/cloudinaryUpload.js";
 
@@ -34,6 +35,7 @@ app.post("/uploadfile", generateSignature);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/task", taskRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

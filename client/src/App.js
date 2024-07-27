@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import LoginPage from "./screens/loginPage";
+import AdminForm from "./components/AdminForm";
 
 //useMemo is a React Hook that lets you cache the result of a calculation between re-renders.
 import { useMemo } from "react";
@@ -22,6 +23,7 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/manageAdmin" element={<AdminForm />} />
             <Route path="/home" element={<HomePage />} />
           </Routes>
         </ThemeProvider>

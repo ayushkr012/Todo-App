@@ -23,7 +23,7 @@ export default function Navbar() {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, admin } = useSelector((state) => state.auth);
+  const { user, admin, mode } = useSelector((state) => state.auth);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
@@ -93,6 +93,24 @@ export default function Navbar() {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
+          {admin && admin.superAdmin && (
+            <Link
+              to="/manageAdmin"
+              style={{
+                textDecoration: "none",
+                color: mode == "dark" ? "white" : "black",
+              }}
+              sx={{
+                "&:hover": {
+                  color: theme.palette.primary.dark,
+                  cursor: "pointer",
+                },
+              }}
+            >
+              Managed Admin
+            </Link>
+          )}
+
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
@@ -180,6 +198,24 @@ export default function Navbar() {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
+            
+            {admin && admin.superAdmin && (
+              <Link
+                to="/manageAdmin"
+                style={{
+                  textDecoration: "none",
+                  color: mode == "dark" ? "white" : "black",
+                }}
+                sx={{
+                  "&:hover": {
+                    color: theme.palette.primary.dark,
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                Managed Admin
+              </Link>
+            )}
 
             <FormControl variant="standard" value={fullName}>
               <Select
